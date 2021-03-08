@@ -66,7 +66,7 @@ node {
 	// DO Performance Test of app using Blazemeter
        stage('Performance Test') {
     	echo 'Running BlazeMeterTest' 
-    //blazeMeterTest credentialsId: '917117ed-d257-41d2-bb35-47dea13f959c', testId: '9014498.taurus', workspaceId: '756635'
+    blazeMeterTest credentialsId: '917117ed-d257-41d2-bb35-47dea13f959c', testId: '9014498.taurus', workspaceId: '756635'
     }
 	
 	//Deploy web App to Prod
