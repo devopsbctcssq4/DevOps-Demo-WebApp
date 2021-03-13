@@ -45,7 +45,7 @@ node {
     
 	//Deploying web app to QA env
 	stage('Deploy to Test') {
-	deploy adapters: [tomcat8(credentialsId: 'tomcat-1', path: '', url: 'http://52.255.157.89:8080/')], contextPath: '/QAWebapp', war: '**/*.war'
+	deploy adapters: [tomcat8(credentialsId: 'tomcat-1', path: '', url: 'http://40.112.56.191:8080/')], contextPath: '/QAWebapp', war: '**/*.war'
 	
 		//Send QA Deployment info to Jira
 	//jiraSendDeploymentInfo environmentId: 'JNG-2', environmentName: 'testing', environmentType: 'testing',  site: 'aksservicedesk.atlassian.net',issueKeys: ['JNG-2'], serviceIds: [''],state: 'successful'
@@ -71,7 +71,7 @@ node {
 	
 	//Deploy web App to Prod
         stage('Deploy to Prod') {
-	      deploy adapters: [tomcat8(credentialsId: 'tomcat-1', path: '', url: 'http://13.68.144.119:8080/')], contextPath: '/ProdWebapp', onFailure: false, war: '**/*.war'
+	      deploy adapters: [tomcat8(credentialsId: 'tomcat-1', path: '', url: 'http://13.82.174.37:8080/')], contextPath: '/ProdWebapp', onFailure: false, war: '**/*.war'
 	     //jiraSendDeploymentInfo environmentId: 'Staging', environmentName: 'Staging', environmentType: 'staging', serviceIds: ['http://13.68.144.119:8080/ProdWebapp'], site: 'devopsbc.atlassian.net', state: 'successful'
 	     
 	      //Send Prod Deployment info to Jira
