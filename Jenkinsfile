@@ -29,7 +29,7 @@ node {
 
 //  Static code Analysis using Sonarqube  
     stage('Static Code Analysis') {
-        withSonarQubeEnv(credentialsId: 'akssonartoken', installationName: 'sonarqube') { // You can override the credential to be used
+        withSonarQubeEnv(credentialsId: 'sonar', installationName: 'sonarqube') { // You can override the credential to be used
        	//sh 'mvn clean package sonar:sonar -Dsonar.host.url=http://52.152.224.93// -Dsonar.sources=. -Dsonar.tests=. -Dsonar.test.inclusions=**/test/java/servlet/createpage_junit.java -Dsonar.exclusions=**/test/java/servlet/createpage_junit.java'
         
 	sh '/var/lib/jenkins/tools/hudson.tasks.Maven_MavenInstallation/Maven/bin/mvn -Dsonar.test.exclusions=**/test/java/servlet/createpage_junit.java -Dsonar.login=admin -Dsonar.password=sonar -Dsonar.tests=. -Dsonar.inclusions=**/test/java/servlet/createpage_junit.java -Dsonar.sources=. sonar:sonar -Dsonar.host.url=http://52.152.224.93:9000'	
