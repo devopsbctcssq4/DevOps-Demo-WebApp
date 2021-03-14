@@ -1,5 +1,24 @@
 pipeline {
      environment {
+
+    // Getting Artifactory server instance
+    
+    	def server = Artifactory.server "Artifcatory1"
+    
+    // Creating an Artifactory Maven instance.
+    
+    	def rtMaven = Artifactory.newMavenBuild()
+    	def buildInfo 
+	
+    // Getting Tools  from Jenkins configuration
+    
+	rtMaven.tool = "Maven"
+	
+    // Setting Artifactory repositories for dependencies resolution and artifacts deployment.
+    
+        rtMaven.deployer releaseRepo:'libs-release-local', snapshotRepo:'libs-snapshot-local', server: server
+        rtMaven.resolver releaseRepo:'libs-release', snapshotRepo:'libs-snapshot', server: server
+	     
     //login id/docker reposotory defined in Jenkins followe by repository name
     registry = "arunsaxena01/avncommunication"
     //credential = Id given jenkins
