@@ -15,8 +15,8 @@ spec:
     spec:
       containers:
       - name: myapp
-        image: acrdevopsbc1.azurecr.io/avncommunication
-        #image: manivannanmari/dockerdemocasestudy:latest
+        #image: acrdevopsbc1.azurecr.io/avncommunication
+        image: arunsaxena01/avncommunication:5
         ports:
         - containerPort: 8080
 ---
