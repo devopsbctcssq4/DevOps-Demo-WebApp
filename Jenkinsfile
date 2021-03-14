@@ -70,8 +70,8 @@ pipeline {
             steps {
                withCredentials([usernamePassword(credentialsId: 'acr-credentials', usernameVariable: 'ACR_ID', passwordVariable: 'ACR_PASSWORD')]) {
 		//sh 'kubectl apply -f deployment.yaml'	
-		 sh 'kubectl set image -n default deployment/myapp myapp=arunsaxena01/avncommunication:5'  
-		 echo 'kubectl set image -n default deployment/myapp myapp=manivannanmari/dockerdemocasestudy1:latest'
+		 sh 'kubectl set image -n default deployment/myapp myapp=arunsaxena01/avncommunication:$BUILD_NUMBER'  
+		 echo 'kubectl set image -n default deployment/myapp myapp=manivannanmari/dockerdemocasestudy1:$BUILD_NUMBER'
 		}
  
             }
