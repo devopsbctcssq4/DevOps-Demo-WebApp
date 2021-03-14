@@ -63,7 +63,19 @@ pipeline {
    //     sh 'docker run --name=myapp -d -p 8081:8000 $registry:$BUILD_NUMBER &'
           sh 'docker run -d -p 8081:8080 --name=myApp $registry:$BUILD_NUMBER'
       }
-             }   
+             } 
+	    
+	    stage('Deploy App in Kuberneter cluster') {
+             
+            steps {
+               withCredentials([usernamePassword(credentialsId: 'acr-credentials', usernameVariable: 'ACR_ID', passwordVariable: 'ACR_PASSWORD')]) {
+		//sh 'kubectl apply -f deployment.yaml'	
+		 sh 'kubectl set image -n default deployment/myapp myapp=arunsaxena01/avncommunication:5'  
+		 echo 'kubectl set image -n default deployment/myapp myapp=manivannanmari/dockerdemocasestudy1:latest'
+		}
+ 
+            }
+        }     
 
     }
 }
