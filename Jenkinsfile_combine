@@ -22,9 +22,9 @@ node {
 	slackSend channel: 'alerts', message: "Pipeline Started ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)", teamDomain: 'devopsbc', tokenCredentialId: 'slack'
    
 	// Cloning Soure code from github	    
-        stage('Clone source') {
-        git url: 'https://github.com/arunsaxena01/DevOps-Demo-WebApp.git'
-    }
+      //  stage('Clone source') {
+       // git url: 'https://github.com/arunsaxena01/DevOps-Demo-WebApp.git'
+   // }
     
 
 //  Static code Analysis using Sonarqube  
@@ -83,10 +83,10 @@ node {
         }
 	
 	stage('Deploy App in Kuberneter cluster') {
-               withCredentials([usernamePassword(credentialsId: 'acr-credentials', usernameVariable: 'ACR_ID', passwordVariable: 'ACR_PASSWORD')]) {
-		 sh 'kubectl apply -f deployment.yaml'	
+               
+		// sh 'kubectl apply -f deployment.yaml'	
 		 sh 'kubectl set image -n default deployment/myapp myapp=arunsaxena01/avncommunication:$BUILD_NUMBER'  
-		}
+		
 
         } 
 	
