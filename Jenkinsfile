@@ -74,19 +74,19 @@ node {
 	stage('Package,Build Docker Image and Push') {
 
                 sh "/var/lib/jenkins/tools/hudson.tasks.Maven_MavenInstallation/Maven/bin/mvn package"
-		sh 'docker build -t prodwebapp .' 
-                sh 'docker tag prodwebapp:latest arunsaxena01/prodwebapp:$BUILD_NUMBER'     
+		sh 'docker build -t avncommunication .' 
+                sh 'docker tag avncommunication:latest arunsaxena01/avncommunication:$BUILD_NUMBER'     
    
         withDockerRegistry([ credentialsId: "dockerhub", url: "" ]) {
-          sh  'docker push arunsaxena01/prodwebapp:$BUILD_NUMBER' 
+          sh  'docker push arunsaxena01/avncommunication:$BUILD_NUMBER' 
         }
 
         }
 	
 	stage('Deploy App in Kuberneter cluster') {
                withCredentials([usernamePassword(credentialsId: 'acr-credentials', usernameVariable: 'ACR_ID', passwordVariable: 'ACR_PASSWORD')]) {
-		sh 'kubectl apply -f deployment.yaml'	
-		 //sh 'kubectl set image -n default deployment/myapp myapp=arunsaxena01/ProdWebapp:$BUILD_NUMBER'  
+		//sh 'kubectl apply -f deployment.yaml'	
+		 sh 'kubectl set image -n default deployment/myapp myapp=arunsaxena01/avncommunication:$BUILD_NUMBER'  
 		}
 
         } 
@@ -102,8 +102,9 @@ node {
 	
 	// Perform Sanity Test on Prod
         stage('Sanity Test') {
-        buildInfo = rtMaven.run pom: 'Acceptancetest/pom.xml', goals: 'test'
-	publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '\\Acceptancetest\\target\\surefire-reports', reportFiles: 'index.html', reportName: 'Sanity Test Report', reportTitles: ''])
+		echo 'Sanity Test'
+        //buildInfo = rtMaven.run pom: 'Acceptancetest/pom.xml', goals: 'test'
+	//publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '\\Acceptancetest\\target\\surefire-reports', reportFiles: 'index.html', reportName: 'Sanity Test Report', reportTitles: ''])
     			  }
 	//jiraSendDeploymentInfo enableGating: true, environmentId: '', environmentName: '', environmentType: 'production', issueKeys: ['TDB-1'], serviceIds: [''], site: 'fresco3.atlassian.net', state: 'successful'
 	//Send Slack message for Pipeline Completion
