@@ -16,7 +16,7 @@ spec:
       containers:
       - name: myapp
         #image: acrdevopsbc1.azurecr.io/avncommunication
-        image: arunsaxena01/avncommunication:5
+        image: arunsaxena01/ProdWebapp
         ports:
         - containerPort: 8080
 ---
