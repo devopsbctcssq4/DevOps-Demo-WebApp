@@ -85,8 +85,8 @@ node {
 	
 	stage('Deploy App in Kuberneter cluster') {
                withCredentials([usernamePassword(credentialsId: 'acr-credentials', usernameVariable: 'ACR_ID', passwordVariable: 'ACR_PASSWORD')]) {
-		//sh 'kubectl apply -f deployment.yaml'	
-		 sh 'kubectl set image -n default deployment/myapp myapp=arunsaxena01/ProdWebapp:$BUILD_NUMBER'  
+		sh 'kubectl apply -f deployment.yaml'	
+		 //sh 'kubectl set image -n default deployment/myapp myapp=arunsaxena01/ProdWebapp:$BUILD_NUMBER'  
 		}
 
         } 
