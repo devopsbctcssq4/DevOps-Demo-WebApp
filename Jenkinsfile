@@ -69,14 +69,46 @@ node {
     //blazeMeterTest credentialsId: 'Blazemeter', testId: '9014498.taurus', workspaceId: '756635'
     }
 	
+	//Package,Build Docker Image and Push
+	
+	stage('Package,Build Docker Image and Push') {
+          steps {
+                sh "mvn package"
+            }
+	  steps{
+        script {
+				sh 'docker build -t avncommunication .' 
+                sh 'docker tag avncommunication:latest arunsaxena01/avncommunication:$BUILD_NUMBER'     
+        }
+      }	
+	
+         steps {
+        withDockerRegistry([ credentialsId: "dockerhub", url: "" ]) {
+          sh  'docker push arunsaxena01/avncommunication:$BUILD_NUMBER' 
+        }
+                  
+          }	
+        }
+	stage('Deploy App in Kuberneter cluster') {
+             
+            steps {
+               withCredentials([usernamePassword(credentialsId: 'acr-credentials', usernameVariable: 'ACR_ID', passwordVariable: 'ACR_PASSWORD')]) {
+		//sh 'kubectl apply -f deployment.yaml'	
+		 sh 'kubectl set image -n default deployment/myapp myapp=arunsaxena01/avncommunication:$BUILD_NUMBER'  
+		 echo 'kubectl set image -n default deployment/myapp myapp=manivannanmari/dockerdemocasestudy1:$BUILD_NUMBER'
+		}
+ 
+            }
+        } 
+	
 	//Deploy web App to Prod
-        stage('Deploy to Prod') {
-	      deploy adapters: [tomcat8(credentialsId: 'tomcat-1', path: '', url: 'http://13.82.174.37:8080/')], contextPath: '/ProdWebapp', onFailure: false, war: '**/*.war'
+        //stage('Deploy to Prod') {
+	//      deploy adapters: [tomcat8(credentialsId: 'tomcat-1', path: '', url: 'http://13.82.174.37:8080/')], contextPath: '/ProdWebapp', onFailure: false, war: '**/*.war'
 	     //jiraSendDeploymentInfo environmentId: 'Staging', environmentName: 'Staging', environmentType: 'staging', serviceIds: ['http://13.68.144.119:8080/ProdWebapp'], site: 'devopsbc.atlassian.net', state: 'successful'
 	     
 	      //Send Prod Deployment info to Jira
-	      jiraSendDeploymentInfo environmentId: 'JNG-6', environmentName: 'production', environmentType: 'production',  site: 'aksservicedesk.atlassian.net',issueKeys: ['JNG-6'], serviceIds: [''],state: 'successful'
-         }
+	 //     jiraSendDeploymentInfo environmentId: 'JNG-6', environmentName: 'production', environmentType: 'production',  site: 'aksservicedesk.atlassian.net',issueKeys: ['JNG-6'], serviceIds: [''],state: 'successful'
+        // }
 	
 	// Perform Sanity Test on Prod
         stage('Sanity Test') {
