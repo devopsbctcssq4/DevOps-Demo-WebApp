@@ -74,11 +74,11 @@ node {
 	stage('Package,Build Docker Image and Push') {
 
                 sh "/var/lib/jenkins/tools/hudson.tasks.Maven_MavenInstallation/Maven/bin/mvn package"
-		sh 'docker build -t ProdWebapp .' 
-                sh 'docker tag ProdWebapp:latest arunsaxena01/ProdWebapp:$BUILD_NUMBER'     
+		sh 'docker build -t prodwebapp .' 
+                sh 'docker tag prodwebapp:latest arunsaxena01/prodwebapp:$BUILD_NUMBER'     
    
         withDockerRegistry([ credentialsId: "dockerhub", url: "" ]) {
-          sh  'docker push arunsaxena01/ProdWebapp:$BUILD_NUMBER' 
+          sh  'docker push arunsaxena01/prodwebapp:$BUILD_NUMBER' 
         }
 
         }
