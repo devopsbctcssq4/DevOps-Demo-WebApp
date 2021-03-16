@@ -73,7 +73,7 @@ node {
 	
 	stage('Package,Build Docker Image and Push') {
 
-                sh "mvn package"
+                sh "/var/lib/jenkins/tools/hudson.tasks.Maven_MavenInstallation/Maven/bin/mvn package"
 		sh 'docker build -t avncommunication .' 
                 sh 'docker tag avncommunication:latest arunsaxena01/avncommunication:$BUILD_NUMBER'     
    
