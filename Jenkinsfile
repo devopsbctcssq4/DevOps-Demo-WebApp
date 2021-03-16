@@ -74,11 +74,11 @@ node {
 	stage('Package,Build Docker Image and Push') {
 
                 sh "/var/lib/jenkins/tools/hudson.tasks.Maven_MavenInstallation/Maven/bin/mvn package"
-		sh 'docker build -t avncommunication .' 
-                sh 'docker tag avncommunication:latest arunsaxena01/avncommunication:$BUILD_NUMBER'     
+		sh 'docker build -t ProdWebapp .' 
+                sh 'docker tag ProdWebapp:latest arunsaxena01/ProdWebapp:$BUILD_NUMBER'     
    
         withDockerRegistry([ credentialsId: "dockerhub", url: "" ]) {
-          sh  'docker push arunsaxena01/avncommunication:$BUILD_NUMBER' 
+          sh  'docker push arunsaxena01/ProdWebapp:$BUILD_NUMBER' 
         }
 
         }
@@ -86,7 +86,7 @@ node {
 	stage('Deploy App in Kuberneter cluster') {
                withCredentials([usernamePassword(credentialsId: 'acr-credentials', usernameVariable: 'ACR_ID', passwordVariable: 'ACR_PASSWORD')]) {
 		//sh 'kubectl apply -f deployment.yaml'	
-		 sh 'kubectl set image -n default deployment/myapp myapp=arunsaxena01/avncommunication:$BUILD_NUMBER'  
+		 sh 'kubectl set image -n default deployment/myapp myapp=arunsaxena01/ProdWebapp:$BUILD_NUMBER'  
 		}
 
         } 
