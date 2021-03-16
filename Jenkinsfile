@@ -72,33 +72,23 @@ node {
 	//Package,Build Docker Image and Push
 	
 	stage('Package,Build Docker Image and Push') {
-          steps {
+
                 sh "mvn package"
-            }
-	  steps{
-        script {
-				sh 'docker build -t avncommunication .' 
+		sh 'docker build -t avncommunication .' 
                 sh 'docker tag avncommunication:latest arunsaxena01/avncommunication:$BUILD_NUMBER'     
-        }
-      }	
-	
-         steps {
+   
         withDockerRegistry([ credentialsId: "dockerhub", url: "" ]) {
           sh  'docker push arunsaxena01/avncommunication:$BUILD_NUMBER' 
         }
-                  
-          }	
+
         }
+	
 	stage('Deploy App in Kuberneter cluster') {
-             
-            steps {
                withCredentials([usernamePassword(credentialsId: 'acr-credentials', usernameVariable: 'ACR_ID', passwordVariable: 'ACR_PASSWORD')]) {
 		//sh 'kubectl apply -f deployment.yaml'	
 		 sh 'kubectl set image -n default deployment/myapp myapp=arunsaxena01/avncommunication:$BUILD_NUMBER'  
-		 echo 'kubectl set image -n default deployment/myapp myapp=manivannanmari/dockerdemocasestudy1:$BUILD_NUMBER'
 		}
- 
-            }
+
         } 
 	
 	//Deploy web App to Prod
