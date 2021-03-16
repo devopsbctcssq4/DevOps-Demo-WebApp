@@ -74,8 +74,7 @@ node {
 	stage('Package,Build Docker Image and Push') {
 
                 sh "/var/lib/jenkins/tools/hudson.tasks.Maven_MavenInstallation/Maven/bin/mvn package"
-		sh 'docker build -t arunsaxena01/avncommunication .' 
-                sh 'docker tag arunsaxena01/avncommunication arunsaxena01/avncommunication:$BUILD_NUMBER'     
+		sh 'docker build -t arunsaxena01/avncommunication:$BUILD_NUMBER .' 
    
         withDockerRegistry([ credentialsId: "dockerhub", url: "" ]) {
           sh  'docker push arunsaxena01/avncommunication:$BUILD_NUMBER' 
