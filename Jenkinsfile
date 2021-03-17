@@ -129,16 +129,11 @@ node {
 
         } 
 	
-		    stage("Production Deployment notification to Jira") {
-            
-                echo "Deploying to production!!"
-            
-            post {
-              always {
-                sh 'sleep 2'
-              }
+        stage("Production Deployment notification to Jira") {
+               sh 'sleep 2'
+              
               // Notify Jira based on deployment step result
-              success {
+              
                 jiraSendDeploymentInfo (
                         site: 'aksservicedesk.atlassian.net',
                         environmentId: 'prod-1',
@@ -149,9 +144,7 @@ node {
                         serviceIds: [
                           'b:YXJpOmNsb3VkOmdyYXBoOjpzZXJ2aWNlLzE0Yjc1NWYyLTdiYTEtMTFlYi05NjRjLTBhYmUzZjRhNjYwMS9jZmU3YTk0ZS04NjhjLTExZWItOGExNy0wYWJlM2Y0YTY2MDE='
                         ]
-                      )
-              }
-            }
+                      )  
 		 }
 		
 
