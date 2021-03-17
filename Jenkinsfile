@@ -82,7 +82,7 @@ node {
 
         }
 	
-           stage('Request Prod deployment approval') { // Raise change request
+           stage('Prod deployment Approval Gate') { // Raise change request
             
                 echo 'Raise change request...'
                 jiraSendDeploymentInfo(site:'aksservicedesk.atlassian.net',
@@ -97,8 +97,7 @@ node {
                         ]
                     )
             
-        }
-        stage("Approval gate") { // Check change request status
+         // Check change request status
             
                 retry(20) { // Poll every 30s for 10min
                     waitUntil { 
