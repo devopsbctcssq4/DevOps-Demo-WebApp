@@ -102,8 +102,8 @@ node {
 	// Perform Sanity Test on Prod
         stage('Sanity Test') {
 		echo 'Sanity Test'
-        //buildInfo = rtMaven.run pom: 'Acceptancetest/pom.xml', goals: 'test'
-	//publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '\\Acceptancetest\\target\\surefire-reports', reportFiles: 'index.html', reportName: 'Sanity Test Report', reportTitles: ''])
+        buildInfo = rtMaven.run pom: 'Acceptancetest/pom.xml', goals: 'test'
+	publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '\\Acceptancetest\\target\\surefire-reports', reportFiles: 'index.html', reportName: 'Sanity Test Report', reportTitles: ''])
     			  }
 	//jiraSendDeploymentInfo enableGating: true, environmentId: '', environmentName: '', environmentType: 'production', issueKeys: ['TDB-1'], serviceIds: [''], site: 'fresco3.atlassian.net', state: 'successful'
 	//Send Slack message for Pipeline Completion
