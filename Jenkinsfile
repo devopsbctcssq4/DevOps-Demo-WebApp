@@ -92,7 +92,7 @@ node {
         }
 	
 		    stage('Request approval') { // Raise change request
-            steps {
+            
                 echo 'Raise change request...'
                 jiraSendDeploymentInfo(site:'aksservicedesk.atlassian.net',
                         environmentId:'prod-1',
@@ -105,10 +105,10 @@ node {
                           'b:YXJpOmNsb3VkOmdyYXBoOjpzZXJ2aWNlLzE0Yjc1NWYyLTdiYTEtMTFlYi05NjRjLTBhYmUzZjRhNjYwMS9jZmU3YTk0ZS04NjhjLTExZWItOGExNy0wYWJlM2Y0YTY2MDE='
                         ]
                     )
-            }
+            
         }
         stage("Approval gate") { // Check change request status
-            steps {
+            
                 retry(20) { // Poll every 30s for 10min
                     waitUntil { 
                         sleep 30
@@ -116,7 +116,7 @@ node {
                           site:'aksservicedesk.atlassian.net', 
                           environmentId:'prod-1'
                         )
-                    }
+                    
                 }   
             }
         }
@@ -130,9 +130,9 @@ node {
         } 
 	
 		    stage("Production Deployment notification to Jira") {
-            steps {
+            
                 echo "Deploying to production!!"
-            }
+            
             post {
               always {
                 sh 'sleep 2'
