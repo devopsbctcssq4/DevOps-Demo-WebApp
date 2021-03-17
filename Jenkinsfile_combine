@@ -92,7 +92,7 @@ node {
 	
 		//Deploy web App to Prod
         stage('Deploy to Prod') {
-	      deploy adapters: [tomcat8(credentialsId: 'tomcat-1', path: '', url: 'http://13.82.174.37:8080/')], contextPath: '/ProdWebapp', onFailure: false, war: '**/*.war'
+	      //deploy adapters: [tomcat8(credentialsId: 'tomcat-1', path: '', url: 'http://13.82.174.37:8080/')], contextPath: '/ProdWebapp', onFailure: false, war: '**/*.war'
 	     //jiraSendDeploymentInfo environmentId: 'Staging', environmentName: 'Staging', environmentType: 'staging', serviceIds: ['http://13.68.144.119:8080/ProdWebapp'], site: 'devopsbc.atlassian.net', state: 'successful'
 	     
 	      //Send Prod Deployment info to Jira
