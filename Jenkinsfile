@@ -22,9 +22,9 @@ node {
 	slackSend channel: 'alerts', message: "Pipeline Started ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)", teamDomain: 'devopsbc', tokenCredentialId: 'slack'
    
 	// Cloning Soure code from github	    
-      //  stage('Clone source') {
-       // git url: 'https://github.com/arunsaxena01/DevOps-Demo-WebApp.git'
-   // }
+        stage('Clone source') {
+        git url: 'https://github.com/devopsbctcssq4/DevOps-Demo-WebApp.git'
+    }
     
 
 //  Static code Analysis using Sonarqube  
