@@ -41,14 +41,14 @@ node {
     }
 
 	// Sending Build notificaiton to Jira
-	jiraSendBuildInfo branch: 'JNG-6', site: 'aksservicedesk.atlassian.net'
+	jiraSendBuildInfo branch: 'JNG-2', site: 'aksservicedesk.atlassian.net'
     
 	//Deploying web app to QA env
 	stage('Deploy to Test') {
 	deploy adapters: [tomcat8(credentialsId: 'tomcat-1', path: '', url: 'http://40.112.56.191:8080/')], contextPath: '/QAWebapp', war: '**/*.war'
 	
 		//Send QA Deployment info to Jira
-	jiraSendDeploymentInfo environmentId: 'JNG-6', environmentName: 'testing', environmentType: 'testing',  site: 'aksservicedesk.atlassian.net',issueKeys: ['JNG-6'], serviceIds: [''],state: 'successful'
+	jiraSendDeploymentInfo environmentId: 'test-1', environmentName: 'testing', environmentType: 'testing',  site: 'aksservicedesk.atlassian.net',issueKeys: ['JNG-2'], serviceIds: [''],state: 'successful'
 
     }
 
@@ -68,22 +68,13 @@ node {
     	echo 'Running BlazeMeterTest' 
     //blazeMeterTest credentialsId: 'Blazemeter', testId: '9014498.taurus', workspaceId: '756635'
     }
-	
-        //Deploy web App to preProd
-        stage('Deploy to preProd') {
-	      //deploy adapters: [tomcat8(credentialsId: 'tomcat-1', path: '', url: 'http://13.82.174.37:8080/')], contextPath: '/ProdWebapp', onFailure: false, war: '**/*.war'
-	     //jiraSendDeploymentInfo environmentId: 'Staging', environmentName: 'Staging', environmentType: 'staging', serviceIds: ['http://13.68.144.119:8080/ProdWebapp'], site: 'devopsbc.atlassian.net', state: 'successful'
-	     
-	      //Send preProd Deployment info to Jira
-	     jiraSendDeploymentInfo environmentId: 'JNG-6', environmentName: 'production', environmentType: 'production',  site: 'aksservicedesk.atlassian.net',issueKeys: ['JNG-6'], serviceIds: [''],state: 'successful'
-         }
 	 
 	//Package,Build Docker Image and Push
 	
 	stage('Package,Build Docker Image and Push') {
 
                 sh "/var/lib/jenkins/tools/hudson.tasks.Maven_MavenInstallation/Maven/bin/mvn package"
-		sh 'docker build -t arunsaxena01/avncommunication:$BUILD_NUMBER /var/lib/jenkins/workspace/DevOps-Demo-WebApp-Docker' 
+		sh 'docker build -t arunsaxena01/avncommunication:$BUILD_NUMBER /var/lib/jenkins/workspace/DevOps-Demo-WebApp' 
    
         withDockerRegistry([ credentialsId: "dockerhub", url: "" ]) {
           sh  'docker push arunsaxena01/avncommunication:$BUILD_NUMBER' 
@@ -91,7 +82,7 @@ node {
 
         }
 	
-		    stage('Request approval') { // Raise change request
+           stage('Request Prod deployment approval') { // Raise change request
             
                 echo 'Raise change request...'
                 jiraSendDeploymentInfo(site:'aksservicedesk.atlassian.net',
@@ -100,7 +91,7 @@ node {
                         environmentType:'production',
                         state:"pending",
                         enableGating:true,
-			issueKeys: ['JNG-11'],						
+			issueKeys: ['JNG-3'],						
                         serviceIds: [
                           'b:YXJpOmNsb3VkOmdyYXBoOjpzZXJ2aWNlLzE0Yjc1NWYyLTdiYTEtMTFlYi05NjRjLTBhYmUzZjRhNjYwMS9jZmU3YTk0ZS04NjhjLTExZWItOGExNy0wYWJlM2Y0YTY2MDE='
                         ]
@@ -121,11 +112,12 @@ node {
             }
         }
 	
-	stage('Deploy App in Kuberneter cluster') {
+	stage('Deploy Web App in Production K8s cluster') {
                
 		// sh 'kubectl apply -f deployment.yaml'	
 		 sh 'kubectl set image -n default deployment/myapp myapp=arunsaxena01/avncommunication:$BUILD_NUMBER'  
-		
+		// Sending Build notificaiton to Jira
+		jiraSendBuildInfo branch: 'JNG-3', site: 'aksservicedesk.atlassian.net'
 
         } 
 	
@@ -140,7 +132,7 @@ node {
                         environmentName: 'prod-1',
                         environmentType: 'production',
                         state: 'successful',
-			issueKeys: ['JNG-11'],
+			issueKeys: ['JNG-3'],
                         serviceIds: [
                           'b:YXJpOmNsb3VkOmdyYXBoOjpzZXJ2aWNlLzE0Yjc1NWYyLTdiYTEtMTFlYi05NjRjLTBhYmUzZjRhNjYwMS9jZmU3YTk0ZS04NjhjLTExZWItOGExNy0wYWJlM2Y0YTY2MDE='
                         ]
@@ -150,7 +142,7 @@ node {
 
 	
 	// Perform Sanity Test on Prod
-        stage('Sanity Test') {
+        stage('Sanity Test in Production') {
 		echo 'Sanity Test'
         buildInfo = rtMaven.run pom: 'Acceptancetest/pom.xml', goals: 'test'
 	publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '\\Acceptancetest\\target\\surefire-reports', reportFiles: 'index.html', reportName: 'Sanity Test Report', reportTitles: ''])
