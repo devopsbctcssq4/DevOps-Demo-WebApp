@@ -150,4 +150,5 @@ node {
 	//jiraSendDeploymentInfo enableGating: true, environmentId: '', environmentName: '', environmentType: 'production', issueKeys: ['TDB-1'], serviceIds: [''], site: 'fresco3.atlassian.net', state: 'successful'
 	//Send Slack message for Pipeline Completion
 	slackSend channel: 'alerts', message: "Pipeline Completed ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)", teamDomain: 'devopsbc', tokenCredentialId: 'slack'
+	cleanWs()
 }
