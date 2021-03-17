@@ -118,10 +118,6 @@ node {
 		 sh 'kubectl set image -n default deployment/myapp myapp=arunsaxena01/avncommunication:$BUILD_NUMBER'  
 		// Sending Build notificaiton to Jira
 		jiraSendBuildInfo branch: 'JNG-3', site: 'aksservicedesk.atlassian.net'
-
-        } 
-	
-        stage("Production Deployment notification to Jira") {
                sh 'sleep 2'
               
               // Notify Jira based on deployment step result
