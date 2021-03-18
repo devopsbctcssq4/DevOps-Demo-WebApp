@@ -22,7 +22,7 @@ node {
 	slackSend channel: 'alerts', message: "Pipeline Started ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)", teamDomain: 'devopsbc', tokenCredentialId: 'slack'
    
 	// Cloning Soure code from github	    
-        stage('Clone source') {
+        stage('Clone source Code') {
         git url: 'https://github.com/devopsbctcssq4/DevOps-Demo-WebApp.git'
     }
     
@@ -58,7 +58,7 @@ node {
     }
 	
 	// Perfrom UI Test
-      stage('UI Test') {
+      stage('Functional (UI) Test') {
         buildInfo = rtMaven.run pom: 'functionaltest/pom.xml', goals: 'test'
 	publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '\\functionaltest\\target\\surefire-reports', reportFiles: 'index.html', reportName: 'UI Test Report', reportTitles: ''])
     }
@@ -101,7 +101,7 @@ node {
             
                 retry(20) { // Poll every 30s for 10min
                     waitUntil { 
-                        sleep 30
+                        sleep 10
                         checkGatingStatus(
                           site:'aksservicedesk.atlassian.net', 
                           environmentId:'prod-1'
