@@ -139,6 +139,7 @@ node {
 	// Perform Sanity Test on Prod
         stage('Sanity Test in Production') {
 		echo 'Sanity Test'
+		sh 'sleep 10'
         buildInfo = rtMaven.run pom: 'Acceptancetest/pom.xml', goals: 'test'
 	publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '\\Acceptancetest\\target\\surefire-reports', reportFiles: 'index.html', reportName: 'Sanity Test Report', reportTitles: ''])
     			  }
