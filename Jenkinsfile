@@ -66,7 +66,7 @@ node {
 	// DO Performance Test of app using Blazemeter
        stage('Performance Test') {
     	echo 'Running BlazeMeterTest' 
-    blazeMeterTest credentialsId: 'Blazemeter', testId: '9014498.taurus', workspaceId: '756635'
+    //blazeMeterTest credentialsId: 'Blazemeter', testId: '9014498.taurus', workspaceId: '756635'
     }
 	 
 	//Package,Build Docker Image and Push
